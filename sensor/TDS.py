@@ -47,12 +47,20 @@ def read_temp():
     return temp_c
 
 def get_ec():
+    #ADC Reading
     averageVoltage = adc.read_adc(1, gain=GAIN)
+   
+    #ADC Value Conversion
     averageVoltage = (averageVoltage*4096)/32767.0
-    averageVoltage = (averageVoltage)
+    
+    #Temperature Compensation
     compensationCoefficient=1.0+0.0185*(Temperature-25.0);    
     CoefficientVolatge=averageVoltage/compensationCoefficient;  
+    
+    #TDS Calculation
     tdsValue=(133.42*compensationVolatge*compensationVolatge*compensationVolatge - 255.86*compensationVolatge*compensationVolatge + 857.39*compensationVolatge)*0.5; 
+    
+    #PPM Conversion
     ppm = (0.8094*tdsValue)+14.98
 
     return ECvalue
